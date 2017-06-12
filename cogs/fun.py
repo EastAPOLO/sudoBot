@@ -15,20 +15,20 @@ class Fun:
         self.bot = bot
         self.config = config
 
-    @commands.group(pass_context=True)
+    # @commands.group(pass_context=True)
     async def cow(self, ctx):
         """A speaking/thinking cow"""
         print(ctx.message.content)
         if ctx.invoked_subcommand is None:
             return await self.bot.say('Invalid amount of arguments passed.')
 
-    @cow.command()
+    # @cow.command()
     async def think(self, *, message : str):
         cow = self.build_box(message, 40) + self.build_thinkcow()
 
         return await self.bot.say('```txt\n{0}```'.format(cow))
 
-    @cow.command()
+    # @cow.command()
     async def say(self, *, message : str):
         cow = self.build_box(message, 40) + self.build_saycow()
 
