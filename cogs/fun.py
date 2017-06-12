@@ -35,8 +35,11 @@ class Fun:
         return await self.bot.say('```txt\n{0}```'.format(cow))
 
     @commands.command(pass_context=True)
-    async def profile(self, ctx, *, user : discord.Member):
+    async def profile(self, ctx, *, user : discord.Member = None):
         """Get an information card on a user in this server."""
+
+        if user is None:
+            user = ctx.message.author
 
         if ctx.invoked_subcommand is None:
 
