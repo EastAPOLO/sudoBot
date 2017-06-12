@@ -54,7 +54,7 @@ thr = threading.Timer(86400, decayWarn)
 with open('./config.json', 'r') as c_json:
     config = json.load(c_json)
 
-description = '''sudobotPy is written in Python. Version 0.1'''
+description = '''sudobotPy is written in Python. Version 1.0'''
 
 #Assign the prefix.
 prefix = config["prefix_settings"]["prefix"]
