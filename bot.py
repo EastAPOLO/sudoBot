@@ -77,7 +77,13 @@ async def on_ready():
     print(bot.user.id)
     print('Bot prefix is set to ' + prefix)
     print('-------------')
-    await bot.change_presence(game=discord.Game(name='with systemd'))
+    # await bot.change_presence(game=discord.Game(name='with systemd'))
+    if config["default_presence"] == "":
+        game = 'with systemd'
+    else:
+        game = config["default_presence"]
+
+    await bot.change_presence(game=discord.Game(name=game))
     await decayWarn()
 
 @bot.event
