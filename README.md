@@ -45,7 +45,8 @@ General:
 Mod:
   kick         Kicks a member from the server.
   ban          Bans a member from the server.
-  prune        Prunes bot messages.
+  prune        Prunes user messages.
+  prunebot     Prunes bot messages.
   warn         Warns a user
   liftwarn     Removes warning points from user
 Misc:
