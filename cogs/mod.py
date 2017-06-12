@@ -95,7 +95,7 @@ class Mod:
 
     @commands.command(pass_context=True, no_pm=True)
     @checks.admin_or_permissions(manage_messages=True)
-    async def prune(self, ctx, amount : int = 50):
+    async def prunebot(self, ctx, amount : int = 50):
         """Prunes bot messages.
         In order for this to work, the bot must have Manage Messages permissions.
         To use the command you must have Manage Messages permissions or have the Admin role.
@@ -115,6 +115,27 @@ class Mod:
             await self.bot.say('`Pruned {0} message.`'.format(calls))
         else:
             await self.bot.say('`Pruned {0} messages.`'.format(calls))
+
+    @commands.command(pass_context=True, no_pm=True)
+    @checks.admin_or_permissions(manage_messages=True)
+    async def prune(self, ctx, user : discord.Member, amount : int = 50):
+        """Prunes user messages."""
+        channel = ctx.message.channel
+
+        calls = 0
+        async for msg in self.bot.logs_from(channel, limit=amount, before=ctx.message):
+            if calls and calls % 5 == 0:
+                await asyncio.sleep(1.5)
+
+            if msg.author == user:
+                await self.bot.delete_message(msg)
+                calls += 1
+
+        if calls == 1:
+            await self.bot.say('`Prune {0} message.`'.format(calls))
+        else:
+            await self.bot.say('`Prune {0} messages.`'.format(calls))
+
 
     
     @commands.command(pass_context=True, no_pm=True)

@@ -46,3 +46,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 *.pyc
+
+# Don't keep the config.json file for sudoBot. Holds info needs to be private xD
+config.json
