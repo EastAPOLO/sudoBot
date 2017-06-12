@@ -65,6 +65,7 @@ class Fun:
                 async with aiohttp.get(_def_avatar) as r:
                     image = await r.content.read()
             else:
+                _avatar = _avatar.replace('webp', 'jpg')
                 async with aiohttp.get(_avatar) as r:
                     image = await r.content.read()
             with open('data/users/avatars/{0}.jpg'.format(user.id),'wb') as f:
