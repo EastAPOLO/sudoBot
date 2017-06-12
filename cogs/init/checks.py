@@ -1,9 +1,15 @@
 from discord.ext import commands
 import discord.utils
+import json
 
 # This was borrowed from Danny's RoboDanny. https://github.com/Rapptz/RoboDanny
 
 def is_owner_check(message):
+    # with open('./config.json', 'r') as c_json:
+    #     config = json.load(c_json)
+
+    # print(config["owner_ids"][0])
+
     return message.author.id == '68847303431041024'
 
 def is_owner():

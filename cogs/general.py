@@ -203,13 +203,8 @@ class General:
     
     @commands.command(pass_context=True, no_pm=True)
     async def warnstatus(self, ctx, user : discord.Member = None):
-        
-        # user = ctx.message.author
-
         if user is None:
             user = ctx.message.author
-
-        print(user)
 
         dataFile = 'data/warns/warns.dat'
         data = {}

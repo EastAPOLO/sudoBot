@@ -27,8 +27,6 @@ class Mod:
         mod_role = None
         roles = ctx.message.server.roles
 
-        print(channels)
-
         if(reason == None):
 
             for idx, i in enumerate(roles):
@@ -103,10 +101,12 @@ class Mod:
 
         channel = ctx.message.channel
 
+        amount += 1
+
         calls = 0
-        async for msg in self.bot.logs_from(channel, limit=amount, before=ctx.message):
+        async for msg in self.bot.logs_from(channel, limit=amount):
             if calls and calls % 5 == 0:
-                await asyncio.sleep(1.5)
+                await asyncio.sleep(0.3)
 
             if msg.author == self.bot.user:
                 await self.bot.delete_message(msg)
@@ -118,18 +118,24 @@ class Mod:
 
     @commands.command(pass_context=True, no_pm=True)
     @checks.admin_or_permissions(manage_messages=True)
-    async def prune(self, ctx, user : discord.Member, amount : int = 50):
+    async def prune(self, ctx, amount : int, user : discord.Member = None):
         """Prunes user messages."""
         channel = ctx.message.channel
 
-        calls = 0
-        async for msg in self.bot.logs_from(channel, limit=amount, before=ctx.message):
-            if calls and calls % 5 == 0:
-                await asyncio.sleep(1.5)
+        amount += 1
 
-            if msg.author == user:
+        calls = 0
+        async for msg in self.bot.logs_from(channel, limit=amount):
+            if calls and calls % 5 == 0:
+                await asyncio.sleep(0.3)
+
+            if user is None:
                 await self.bot.delete_message(msg)
                 calls += 1
+            else:
+                if msg.author == user:
+                    await self.bot.delete_message(msg)
+                    calls += 1
 
         if calls == 1:
             await self.bot.say('`Prune {0} message.`'.format(calls))

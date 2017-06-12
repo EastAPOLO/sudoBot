@@ -49,3 +49,7 @@ Temporary Items
 
 # Don't keep the config.json file for sudoBot. Holds info needs to be private xD
 config.json
+
+# Keep out compiled python bullshit
+cogs/__pycache__/
+cogs/init/__pycache__/

@@ -5,11 +5,17 @@ import asyncio
 import json
 import datetime
 import threading
+import os
 
 #Import Modules
 import cogs.general
 import cogs.fun
 import cogs.mod
+
+if not os.path.isfile('data/warns/warns.dat'):
+    with open('data/warns/warns.dat', 'w') as f:
+        data = {}
+        json.dump(data, f)
 
 async def decayWarn():
     dataFile = 'data/warns/warns.dat'

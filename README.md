@@ -31,7 +31,6 @@ Currently, the only way to enable / disable these are through `config.json` but 
 ## Commands
 ```php
 Fun:
-  cow          A speaking/thinking cow
   profile      Get an information card on a user in this server.
   profilesetup Setup your profile card
   setprofilebg Set a profile card background image.
