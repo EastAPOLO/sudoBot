@@ -85,112 +85,112 @@ class General:
                 return await self.bot.say('You\'re not in that role.')
 
     @commands.command(pass_context=True, hidden=True)
-    async def pacman(self, ctx, cmd=None, *, query=None):
-        """Pacman commands.
-        ```
-        ```tex
-        Commands :
-        # -Ss [query] > searches the arch and aur repositories."""
+    async def pacman(self, ctx, cmd=None, query=None):
+        """Search Arch repos or AUR"""
         if cmd == '-Ss':
-
             if query is None:
                 return await self.bot.say('Invalid amount of arguments passed.')
 
-            print('Searching for {0} in Arch repositories and the AUR.'.format(query))
-
             await self.bot.say('Searching for {0} in Arch repositories and the AUR.'.format(query))
 
-            pkgs = [['Name','Repo','Arch']]
-            pkgsinfos = [['Name','Repo','Arch','Version','Description','URL']]
+            pkgs = []
+            pkginfos = []
 
-            async with aiohttp.get('https://www.archlinux.org/packages/search/json/?q={0}'.format(query)) as r:
+            async with aiohttp.get('https://archlinux.org/packages/search/json?q={0}'.format(query)) as r:
                 ar = await r.json()
                 ar = ar['results']
-                print(len(ar))
+                print('{0} packages from the Arch repo'.format(len(ar)))
                 for count, res in enumerate(ar):
                     if count < 10:
                         if not res['pkgname'] in pkgs:
                             pkgs.append([res['pkgname'],res['repo'],res['arch']])
-                            pkgsinfos.append([res['pkgname'],res['repo'],res['arch'],res['pkgver']+"-"+res['pkgrel'],res['pkgdesc'],res['url']])
+                            pkginfos.append([res['pkgver']+'-'+res['pkgrel'],res['pkgdesc'],res['url']])
                         else:
                             count -= 1
-
-            async with aiohttp.get('http://aur4.archlinux.org/rpc.php?type=search&arg={0}'.format(query)) as u:
+            
+            async with aiohttp.get('https://aur.archlinux.org/rpc.php?v=5&type=search&arg={0}'.format(query)) as u:
                 au = await u.json()
                 au = au['results']
-                print(len(au))
+                print('{0} packages from the AUR'.format(len(au)))
                 for count, res in enumerate(au):
                     if count < 10:
                         if not res['Name'] in pkgs:
                             pkgs.append([res['Name'],'AUR','any'])
-                            pkgsinfos.append([res['Name'],'AUR','any',res['Version'],res['Description'],res['URL']])
+                            pkginfos.append([res['Version'],res['Description'],res['URL']])
                         else:
                             count -= 1
 
-                print(pkgs)
-
-                if(len(pkgs) > 1):
+                if (len(pkgs) > 1):
                     result = '```tex\n'
                     for cnt, i in enumerate(pkgs):
-                        if cnt < 20:
-                            for _cnt, ii in enumerate(pkgsinfos):
-                                if _cnt < 20:
-                                    result += '# ' + 'Repo : ' + i[1] + ' | Arch : ' + i[2] + '| Name : ' + i[0] + '\n'
-                                    #result += '' + i[1] + '/' + i[0] + ' (' + i[2] + ') \n'
+                        result += 'Name: '+i[0]+' | Repo: '+i[1]+' | Arch: '+i[2]+'\n';
 
-                    await self.bot.say('Reply with the name of one of the following package names within 20 seconds to get more information.')
-                    await self.bot.say(result + '\n```')
+                    result += '\nReply with the name of one of the following package names within 20 seconds to get more information.'
+                    await self.bot.say('{0}```'.format(result))
 
                     def reply_check(m):
-                        print('Content of m : ' + m)
+                        print('Content of m: ' + m)
+                        print(pkgs)
                         if m in pkgs:
                             return True
 
-                    userReply = await self.bot.wait_for_message(timeout=20.0, author= ctx.message.author)
+                    userReply = await self.bot.wait_for_message(timeout=20.0, author=ctx.message.author)
 
                     try:
                         replyMatch = reply_check(userReply.content)
                     except Exception as error:
                         print(error)
-                        print('Most likely a time-out.')
+                        print('Most likely a time-out')
 
-                    if userReply is None:
-                        await self.bot.say('Timed out.')
-                        return
-                    elif replyMatch == True:
+                    print(reply_check(userReply.content))
 
-                        for j in pkgsinfos:
-                            print('Ready to send info. Find data.')
-                            if userReply.content in j:
-                                print('Found package!')
-                                print(j)
-                                pName = userReply.content
-                                if 'AUR' in j:
-                                    print('IS IN AUR')
-                                    pVersion = j[3]
-                                    pDescription = j[4]
-                                    pSourceURL = j[5]
-                                    pURL = 'https://aur.archlinux.org/packages/' + pName
+                    # if userReply is None:
+                    #     await self.bot.say('Timed out')
+                    #     return
+                    # elif replyMatch == True:
+                    #     print(reply_check(userReply.content))
+        else:
+            await self.bot.say('Invalid arguments')
 
-                                    await self.bot.say('Info on : {0}\n```tex\n# Package Name : {0}\n# Version : {1}\n# Description : {2}\n# Source : {3}\n# AUR : {4}```'.format(pName, pVersion, pDescription, pSourceURL, pURL))
-                                    return
-                                else:
-                                    print('IS IN ARCH REPO')
-                                    pVersion = j[3]
-                                    pDescription = j[4]
-                                    pArch = j[2]
-                                    pRepo = j[1]
-                                    pSourceURL = j[5]
 
-                                    await self.bot.say('Info on : {0}\n```tex\n# Package Name : {0}\n# Version : {1}\n# Description : {2}\n# Arch : {3}\n# Repo : {4}\n# Source : {5}```'.format(pName, pVersion, pDescription, pArch, pRepo, pSourceURL))
-                                    return
-                    else:
-                        return await self.bot.say('Previous search was exited.')
 
-                else:
-                    return await self.bot.say('No results found.')
-        elif cmd != "-Ss" or cmd == None:
-            return await self.bot.say('Invalid arguments passed.')
+    #             if userReply is None:
+    #                     await self.bot.say('Timed out.')
+    #                     return
+    #                 elif replyMatch == True:
+
+    #                     for j in pkgsinfos:
+    #                         print('Ready to send info. Find data.')
+    #                         if userReply.content in j:
+    #                             print('Found package!')
+    #                             print(j)
+    #                             pName = userReply.content
+    #                             if 'AUR' in j:
+    #                                 print('IS IN AUR')
+    #                                 pVersion = j[3]
+    #                                 pDescription = j[4]
+    #                                 pSourceURL = j[5]
+    #                                 pURL = 'https://aur.archlinux.org/packages/' + pName
+
+    #                                 await self.bot.say('Info on : {0}\n```tex\n# Package Name : {0}\n# Version : {1}\n# Description : {2}\n# Source : {3}\n# AUR : {4}```'.format(pName, pVersion, pDescription, pSourceURL, pURL))
+    #                                 return
+    #                             else:
+    #                                 print('IS IN ARCH REPO')
+    #                                 pVersion = j[3]
+    #                                 pDescription = j[4]
+    #                                 pArch = j[2]
+    #                                 pRepo = j[1]
+    #                                 pSourceURL = j[5]
+
+    #                                 await self.bot.say('Info on : {0}\n```tex\n# Package Name : {0}\n# Version : {1}\n# Description : {2}\n# Arch : {3}\n# Repo : {4}\n# Source : {5}```'.format(pName, pVersion, pDescription, pArch, pRepo, pSourceURL))
+    #                                 return
+    #                 else:
+    #                     return await self.bot.say('Previous search was exited.')
+
+    #             else:
+    #                 return await self.bot.say('No results found.')
+    #     elif cmd != "-Ss" or cmd == None:
+    #         return await self.bot.say('Invalid arguments passed.')
 
 
 
