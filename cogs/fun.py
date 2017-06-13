@@ -56,7 +56,7 @@ class Fun:
 
             for idy, ii in enumerate(_roles):
                 try:
-                    _roleImages[ii.name] = Image.open('data/images/distros/small/{0}.png'.format(ii.name.lower()))
+                    _roleImages[ii.name] = Image.open('data/images/distros/small/{0}.png'.format(ii.name.lower())).convert('RGBA')
                 except:
                     print('No role icon for ' + ii.name)
 
