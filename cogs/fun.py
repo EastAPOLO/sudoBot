@@ -15,6 +15,11 @@ class Fun:
         self.bot = bot
         self.config = config
 
+    @commands.group(pass_context=True)
+    async def cinnamon(self):
+        """Why do kids love the taste of Cinnamon Toast Crunch?"""
+        return await self.bot.say("Because of the cinnamonny sugar swirls in every bite!");
+
     # @commands.group(pass_context=True)
     async def cow(self, ctx):
         """A speaking/thinking cow"""
