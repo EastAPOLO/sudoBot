@@ -85,7 +85,7 @@ class General:
 
     @commands.command(pass_context=True)
     async def pacman(self, ctx, cmd=None, query=None):
-        """Search Arch repos or AUR"""
+        """Search Arch repos or AUR."""
         if cmd == '-Ss':
             if query is None:
                 return await self.bot.say('Invalid amount of arguments passed.')
@@ -185,6 +185,7 @@ class General:
 
     @commands.command(pass_context=True, no_pm=True)
     async def warnstatus(self, ctx, user : discord.Member = None):
+        """Check how many warning points you currently have."""
         if user is None:
             user = ctx.message.author
 
