@@ -83,7 +83,7 @@ async def on_ready():
     else:
         game = config["default_presence"]
 
-    await bot.change_presence(game=discord.Game(name=game))
+    await bot.change_presence(game=discord.Game(name=game, type=0))
     await decayWarn()
 
 @bot.event
