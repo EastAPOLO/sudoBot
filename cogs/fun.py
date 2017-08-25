@@ -33,7 +33,7 @@ class Fun:
 
         return await self.bot.say('```txt\n{0}```'.format(cow))
 
-    #@cow.command()
+    @cow.command()
     async def say(self, *, message : str):
         cow = self.build_box(message, 40) + self.build_saycow()
 
